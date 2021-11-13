@@ -1,6 +1,6 @@
 #Python script to parse through text file
 date = 0
-file = open('WhatsApp Chat.txt', 'r') 
+file = open('WhatsApp Chat.txt', 'r',  encoding="utf8") 
 thisdic = {}
 
 for line in file:
