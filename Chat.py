@@ -1,25 +1,20 @@
 #Python script to parse through text file
-date = 0
 file = open('WhatsApp Chat.txt', 'r',  encoding="utf8") 
-thisdic = {}
-
+counts = {}
 for line in file:
-	#parce out date
-	part = line.partition(',')
-	datenew = part[0]
-	if datenew != date:
-		date = datenew
-		#parce out part of the name from date
-		name = part[2]
-		name = name.partition('-')
-		#parce out name and message
-		name = name[2]
-		name = name.partition(':')
-		name = name[0].strip(" ")
-		#name and add counter value
-		if name in thisdic.keys():
-			thisdic[name] += 1
-		else:
-			thisdic[name] = 1
+    words = line.partition(" - ")[2:][0].split(":")[1].split()
 
-print(thisdic)
+    try:
+        words.remove('<Media')
+        words.remove("omitted>")
+    except:
+        pass
+
+    for word in words:
+        word_tmp = word.rstrip(" ?<>,!.").lower()
+        counts[word_tmp] = counts.get(word_tmp, 0) + 1
+
+df = pd.DataFrame.from_dict(counts, orient='index')
+df = df.sort_values(by=[0], ascending=False)
+df = df.head(50)
+print(df)
